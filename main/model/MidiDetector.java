@@ -1,11 +1,12 @@
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener; 
+import java.awt.*;
+import java.awt.event.*; 
 import javax.sound.midi.*;
 import javax.swing.*; 
 
 public class MidiDetector  extends JFrame implements KeyListener {
     private Synthesizer synthesizer;
     private MidiChannel channel;
+    private JLabel lJLabel;
 
     public MidiDetector() {
         // Set up the JFrame
@@ -13,6 +14,12 @@ public class MidiDetector  extends JFrame implements KeyListener {
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addKeyListener(this);
+        setLayout(new FlowLayout());
+
+        //initialize the label
+        lJLabel=new JLabel();
+        lJLabel.setFont(new Font("Arial", Font.PLAIN, 28));
+        add(lJLabel);
         setVisible(true);
         MidiDevice device;
         MidiDevice.Info[] deviceInfo= MidiSystem.getMidiDeviceInfo();
@@ -23,6 +30,7 @@ public class MidiDetector  extends JFrame implements KeyListener {
                     device.open();
                 }
                 System.out.println("Successfully connected to: "+deviceInfo[i]);
+                lJLabel.setText("Successfully connected to "+ deviceInfo[i].getName());
                 // set the MIDI input reciever to get MIDI data from the device 
                 device.getTransmitter().setReceiver(new MidiInputReceiver(device.getDeviceInfo().toString()));
             } catch (Exception e) {
@@ -68,6 +76,7 @@ public class MidiDetector  extends JFrame implements KeyListener {
             @Override
             public void close() {
             // Implement close if needed for resource management
+            
         }
         }
 
