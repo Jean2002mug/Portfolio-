@@ -11,7 +11,6 @@ import javax.sound.midi.*;
 import midi.MidiInputReceiver;
 
 public class MidiSetup {
-    private MidiInputReceiver midiInputReceiver;
     private Boolean keyboardSetup = false; // Initialize to false
     private MidiDevice midiDevice;
     private Synthesizer synthesizer;
@@ -45,10 +44,12 @@ public class MidiSetup {
 
                 // Set the MIDI input receiver to get MIDI data from the device
                 midiDevice.getTransmitter().setReceiver(new MidiInputReceiver(deviceName, channel));
-                keyboardSetup = true;
-                break; // Stop after finding the first available device
+                if (deviceName.equals("Real Time Sequencer")) {
+                    keyboardSetup = true;
+                }
             } catch (MidiUnavailableException e) {
-                System.out.println("Failed to open MIDI device: " + info.getName());
+                //System.out.println("Failed to open MIDI device: " + info.getName());
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -73,16 +74,16 @@ public class MidiSetup {
     private boolean isKeyboardSetup() {
         return keyboardSetup;
     }
-    public void keyboardSetup(){
-        if(isKeyboardSetup()){
+
+    public void keyboardSetup() {
+        if (isKeyboardSetup()) {
             System.out.println("MIDI device " + deviceName + " setup successfully.");
-        }
-        else{
-            System.out.println("no keyboard has been connected");
+        } else {
+            System.out.println("No keyboard has been connected");
         }
     }
+
     public static void main(String[] args) {
         new MidiSetup();
     }
 }
-
