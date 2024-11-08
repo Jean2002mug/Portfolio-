@@ -8,7 +8,6 @@ package model;
  * 
  */
 import javax.sound.midi.*;
-import midi.MidiInputReceiver;
 
 public class MidiSetup {
     private Boolean keyboardSetup = false; // Initialize to false
@@ -16,60 +15,22 @@ public class MidiSetup {
     private Synthesizer synthesizer;
     private MidiChannel channel;
     private String deviceName;
+    private MidiInputProcessor midiInputProcessor;
 
     public MidiSetup() {
-        this.channel = initializeSynthesizer();
-        selectMIDI();
+        midiInputProcessor= new MidiInputProcessor();
+        openMidiConnection(midiInputProcessor);
         keyboardSetup();
     }
 
-    private MidiChannel initializeSynthesizer() {
-        try {
-            synthesizer = MidiSystem.getSynthesizer();
-            synthesizer.open();
-            return synthesizer.getChannels()[0]; // Get the first MIDI channel
-        } catch (MidiUnavailableException e) {
-            e.printStackTrace();
-            return null;
+    private void openMidiConnection(MidiInputProcessor midiInputProcessor)  {
+
+        deviceName= midiInputProcessor.getDevice().toString();
+        if (deviceName.equals("Real Time Sequencer")) {
+            keyboardSetup = true;
         }
     }
-
-    private void selectMIDI() {
-        MidiDevice.Info[] deviceInfo = MidiSystem.getMidiDeviceInfo();
-        for (MidiDevice.Info info : deviceInfo) {
-            try {
-                midiDevice = MidiSystem.getMidiDevice(info);
-                openMidiConnection(midiDevice);
-                deviceName = midiDevice.getDeviceInfo().toString();
-
-                // Set the MIDI input receiver to get MIDI data from the device
-                midiDevice.getTransmitter().setReceiver(new MidiInputReceiver(deviceName, channel));
-                if (deviceName.equals("Real Time Sequencer")) {
-                    keyboardSetup = true;
-                }
-            } catch (MidiUnavailableException e) {
-                //System.out.println("Failed to open MIDI device: " + info.getName());
-                
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void openMidiConnection(MidiDevice device) throws MidiUnavailableException {
-        if (!device.isOpen()) {
-            device.open();
-        }
-    }
-
-    public void closeMidiConnection() {
-        if (midiDevice != null && midiDevice.isOpen()) {
-            midiDevice.close();
-        }
-        if (synthesizer != null && synthesizer.isOpen()) {
-            synthesizer.close();
-        }
-    }
+    
 
     private boolean isKeyboardSetup() {
         return keyboardSetup;

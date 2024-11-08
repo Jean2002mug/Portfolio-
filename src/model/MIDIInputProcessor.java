@@ -1,6 +1,5 @@
-
+package model;
 import javax.sound.midi.*;
-
 /**
  * Takes in MIDI keyboard input, and translates it
  * to sound and a <set of> letter name values corresponding
@@ -20,6 +19,7 @@ public class MidiInputProcessor {
      * Channel for sending and receiving MIDI messages.
      */
     private MidiChannel channel;
+    private MidiDevice midiDevice;
 
     /**
      * Constructor for a MIDIInputProcessor object.
@@ -40,6 +40,7 @@ public class MidiInputProcessor {
                 // Set the MIDI input reciever to get MIDI data from the device 
                 MidiInputReceiver receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), channel);
                 device.getTransmitter().setReceiver(receiver);
+                midiDevice= device;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -54,7 +55,9 @@ public class MidiInputProcessor {
             e.printStackTrace();
         }
     }
-
+    public MidiDevice getDevice(){
+        return midiDevice;
+    }
     public static void main(String[] args) {
         new MidiInputProcessor();
     }
