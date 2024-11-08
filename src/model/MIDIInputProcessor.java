@@ -1,75 +1,62 @@
-package model;
 
 import javax.sound.midi.*;
 
 /**
- * This class takes MIDI keyboard input, and
- * using java's built in sound library, outputs
- * a sound corresponding to the note(s) that were
- * pressed.
+ * Takes in MIDI keyboard input, and translates it
+ * to sound and a <set of> letter name values corresponding
+ * to the musical note(s) that have been played.
  * 
  * @author Lucas Arsenault
- * Last Updated: 2024-11-03
+ * @author Jean Michel Mugabe
  */
-public class MIDIInputProcessor {
+public class MidiInputProcessor {
 
-    public static void main(String[] args) {
-        // Get the MIDI synthesizer and open it
-        Synthesizer synthesizer = MidiSystem.getSynthesizer();
-        synthesizer.open();
+    /**
+     * Synthesizer generates sound.
+     */
+    private Synthesizer synthesizer;
 
-        // Get the MIDI channel
-        MidiChannel[] channels = synthesizer.getChannels();
-        MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
+    /**
+     * Channel for sending and receiving MIDI messages.
+     */
+    private MidiChannel channel;
 
-        // Find a MIDI input device and open it
-        MidiDevice midiDevice = null;
-        for (int i = 0; i < infos.length; i++) {
-            MidiDevice.Info info = infos[i];
-            if (info.getDescription().contains("MIDI")) {
-                midiDevice = MidiSystem.getMidiDevice(info);
-                if (!midiDevice.isOpen()) {
-                    midiDevice.open();
+    /**
+     * Constructor for a MIDIInputProcessor object.
+     * Initializes the device and synthesizer.
+     */
+    public MidiInputProcessor() {
+        // Initialize MIDI device
+        MidiDevice device;
+        MidiDevice.Info[] deviceInfo= MidiSystem.getMidiDeviceInfo();
+        for(int i=0; i< deviceInfo.length;i++){
+            try {
+                device = MidiSystem.getMidiDevice(deviceInfo[i]);
+                if (!device.isOpen()){
+                    device.open();
                 }
-                break;
+                System.out.println("Successfully connected to: " + deviceInfo[i]);
+                
+                // Set the MIDI input reciever to get MIDI data from the device 
+                MidiInputReceiver receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), channel);
+                device.getTransmitter().setReceiver(receiver);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
-        // Set up a listener for MIDI events
-        midiDevice.getTransmitter().setReceiver(new Receiver() {
-            @Override
-            public void send(MidiMessage message, long timeStamp) {
-                // Check for note on message
-                if (message instanceof ShortMessage) {
-                    ShortMessage sm = (ShortMessage) message;
-                    if (sm.getCommand() == ShortMessage.NOTE_ON) {
-                        int note = sm.getData1();
-                        int velocity = sm.getData2();
-                        System.out.println("Note On: " + note + ", Velocity: " + velocity);
-                        // Play note
-                        channels[0].noteOn(note, velocity);
-                    } else if (sm.getCommand() == ShortMessage.NOTE_OFF) {
-                        int note = sm.getData1();
-                        System.out.println("Note Off: " + note);
-                        // Stop note
-                        channels[0].noteOff(note);
-                    }
-                }
-            }
-
-            @Override
-            public void close() {}
-        });
-
-        // Keep program running
-        System.out.println("Listening for MIDI input...");
-        boolean running = true;
-        while (running) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                running = false;
-            }
+        // Initialize MIDI synthesizer
+        try {
+            synthesizer = MidiSystem.getSynthesizer();
+            synthesizer.open();
+            channel = synthesizer.getChannels()[0];
+        } catch (MidiUnavailableException e) {
+            e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        new MidiInputProcessor();
+    }
+    
 }
