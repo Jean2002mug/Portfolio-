@@ -42,11 +42,13 @@ public class MidiInputReceiver implements Receiver {
                 try {
                     channel.noteOn(key, velocity);
                 } catch (NullPointerException e) {}
+                
             } else if (command == ShortMessage.NOTE_OFF || (command == ShortMessage.NOTE_ON && velocity == 0)) {
                 System.out.println("Note OFF: " + noteName);
                 try {
                     channel.noteOff(key);
                 } catch (NullPointerException e) {}
+            
             }
         }
     }
