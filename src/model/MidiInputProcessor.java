@@ -1,8 +1,6 @@
 package model;
 
-import java.awt.event.*; 
 import javax.sound.midi.*;
-import javax.swing.*; 
 
 /**
  * Takes in MIDI keyboard input, and translates it
@@ -12,7 +10,7 @@ import javax.swing.*;
  * @author Lucas Arsenault
  * @author Jean Michel Mugabe
  */
-public class MidiInputProcessor extends JFrame implements KeyListener {
+public class MidiInputProcessor {
 
     /**
      * Synthesizer generates sound.
@@ -56,28 +54,6 @@ public class MidiInputProcessor extends JFrame implements KeyListener {
         } catch (MidiUnavailableException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        // Generate sound based on computer keyboard
-        // int midiNote = mapKeyToMidi(e.getKeyCode());
-        // if (midiNote != -1) {
-        //     channel.noteOn(midiNote, 100); // Play note with velocity 100
-        // }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // int midiNote = mapKeyToMidi(e.getKeyCode());
-        // if (midiNote != -1) {
-        //     channel.noteOff(midiNote); // Stop the note
-        // }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // not implemented yet
     }
 
     public static void main(String[] args) {

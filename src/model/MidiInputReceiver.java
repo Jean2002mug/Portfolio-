@@ -38,7 +38,7 @@ public class MidiInputReceiver implements Receiver {
             int velocity = sm.getData2();
 
             if (command == ShortMessage.NOTE_ON && velocity > 0) {
-                System.out.println("Note ON: " + noteName + " Velocity: " + velocity);
+                System.out.println("Note ON: " + noteName + " | Velocity: " + velocity);
                 try {
                     channel.noteOn(key, velocity);
                 } catch (NullPointerException e) {}
