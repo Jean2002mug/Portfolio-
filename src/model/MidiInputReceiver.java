@@ -1,6 +1,7 @@
 package model;
 
 import javax.sound.midi.*;
+import java.util.ArrayList;
 
 /**
  * Receives the MIDI message, and translates the raw
@@ -11,12 +12,20 @@ import javax.sound.midi.*;
  */
 public class MidiInputReceiver implements Receiver {
     
+    /**
+     * Number of unique notes on the keyboard.
+     */
     private static final int NUM_NOTES = 12;
 
     /**
      * Channel for sending and receiving MIDI messages.
      */
     private MidiChannel channel;
+
+    /**
+     * List of note names for the inputs currently played.
+     */
+    private ArrayList<String> noteNames;
 
     /**
      * Constructs an input receiver.
@@ -39,11 +48,13 @@ public class MidiInputReceiver implements Receiver {
 
             if (command == ShortMessage.NOTE_ON && velocity > 0) {
                 System.out.println("Note ON: " + noteName + " | Velocity: " + velocity);
+                noteNames.add(noteName);
                 try {
                     channel.noteOn(key, velocity);
                 } catch (NullPointerException e) {}
             } else if (command == ShortMessage.NOTE_OFF || (command == ShortMessage.NOTE_ON && velocity == 0)) {
                 System.out.println("Note OFF: " + noteName);
+                noteNames.remove(noteName);
                 try {
                     channel.noteOff(key);
                 } catch (NullPointerException e) {}
@@ -57,12 +68,21 @@ public class MidiInputReceiver implements Receiver {
     }
 
     /**
+     * Returns the list of note names for the input currently being played.
+     * 
+     * @return List of note names for the input currently being played.
+     */
+    public ArrayList<String> getNoteNames() {
+        return noteNames;
+    }
+
+    /**
      * Translates a MIDI key integer value to
      * a string containing the musical note name
      * for the corresponding key.
      * 
      * @param key The MIDI integer note value.
-     * @return THe corresponding musical note name.
+     * @return The corresponding musical note name.
      */
     private String getNoteName(int key) {
         String noteName = "";
