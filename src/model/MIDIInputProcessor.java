@@ -19,7 +19,7 @@ public class MidiInputProcessor {
      * Channel for sending and receiving MIDI messages.
      */
     private MidiChannel channel;
-    private MidiDevice midiDevice;
+    private String  midiDevice;
 
     /**
      * Constructor for a MIDIInputProcessor object.
@@ -40,7 +40,7 @@ public class MidiInputProcessor {
                 // Set the MIDI input reciever to get MIDI data from the device 
                 MidiInputReceiver receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), channel);
                 device.getTransmitter().setReceiver(receiver);
-                midiDevice= device;
+                midiDevice= deviceInfo[i].getName();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -55,7 +55,7 @@ public class MidiInputProcessor {
             e.printStackTrace();
         }
     }
-    public MidiDevice getDevice(){
+    public String getDevice(){
         return midiDevice;
     }
     public static void main(String[] args) {
