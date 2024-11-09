@@ -1,19 +1,19 @@
 package modelTest;
 
 import model.MidiInputReceiver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import javax.sound.midi.*;
 
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 public class MidiInputReceiverTest {
 
     private MidiChannel mockChannel;
     private MidiInputReceiver midiInputReceiver;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         mockChannel = mock(MidiChannel.class);
         midiInputReceiver = new MidiInputReceiver("TestReceiver", mockChannel);
