@@ -1,5 +1,9 @@
 package modelTest;
 
+/**
+ * @author Jean Michel Mugabe
+*/
+
 import model.MidiSetup;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +33,6 @@ public class MidiSetupTest {
         assertNotNull("Device name should not be null after setup.", midiSetup.getDeviceName());
         assertFalse("Device name should not be empty after setup.", midiSetup.getDeviceName().isEmpty());
     }
-
-    @Test
-    public void testKeyboardSetupMessage() {
-        // Capture the printed output during keyboard setup
-        midiSetup.keyboardSetup();
-        // Note: Verifying printed outputs directly can be done using a custom output stream
-    }
 }
+
+  

@@ -24,9 +24,14 @@ public class MidiSetup {
     private void openMidiConnection(MidiInputProcessor midiInputProcessor)  {
 
         deviceName= midiInputProcessor.getDevice().toString();
-        if (!(deviceName.equals("Microsoft MIDI Mapper")&& deviceName.equals("Real Time Sequencer")&& deviceName.equals("Gervill"))) {
-            keyboardSetup = true;
-        }
+        if (deviceName != null && !deviceName.equalsIgnoreCase("Microsoft MIDI Mapper")
+            && !deviceName.equalsIgnoreCase("Real Time Sequencer")
+            && !deviceName.equalsIgnoreCase("Gervill")) {
+        keyboardSetup = true;
+    } else {
+        keyboardSetup = false;
+        deviceName= null;
+    }
     }
     
 
