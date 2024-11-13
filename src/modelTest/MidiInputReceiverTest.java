@@ -41,12 +41,12 @@ public class MidiInputReceiverTest {
     @Test
     public void testSendNoteOnMessage() throws Exception {
         // Create a ShortMessage for NOTE_ON with a velocity > 0
-        ShortMessage noteOnMessage = new ShortMessage(ShortMessage.NOTE_ON, 0, 60, 100); // MIDI key 60 (Middle C), velocity 100
+        ShortMessage noteOnMessage = new ShortMessage(ShortMessage.NOTE_ON, 11, 100); // MIDI key 60 (Middle C), velocity 100
         midiInputReceiver.send(noteOnMessage, -1);
 
         // Check if the note name "C" was added to the noteNames list
         ArrayList<String> noteNames = midiInputReceiver.getNoteNames();
-        assertTrue("Note name should be in the list", noteNames.contains("C"));
+        assertTrue("Note name should  be in the list", noteNames.contains("C"));
         
         // Small delay to allow the note to be heard if needed
         Thread.sleep(100);

@@ -35,6 +35,7 @@ public class MidiInputReceiver implements Receiver {
      */
     public MidiInputReceiver(String name, MidiChannel channel) {
         this.channel = channel;
+        noteNames = new  ArrayList<>();
     }
 
     @Override
