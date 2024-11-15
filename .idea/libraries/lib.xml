@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/junit-4.13.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hamcrest-core-1.3.jar!/" />
+      <root url="file://$USER_HOME$/javafx-sdk-23.0.1 2/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$USER_HOME$/javafx-sdk-23.0.1 2/lib" />
+    </NATIVE>
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/javafx-sdk-23.0.1 2/lib" recursive="false" />
+  </library>
+</component>
