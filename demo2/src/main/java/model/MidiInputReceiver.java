@@ -5,6 +5,7 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Receives the MIDI message, and translates the raw
@@ -28,7 +29,7 @@ public class MidiInputReceiver implements Receiver {
     /**
      * List of note names for the inputs currently played.
      */
-    private ArrayList<String> noteNames;
+    private Set<Integer> noteNames;
 
     /**
      * Constructs an input receiver.
@@ -45,19 +46,19 @@ public class MidiInputReceiver implements Receiver {
         if (message instanceof ShortMessage) {
             ShortMessage sm = (ShortMessage) message;
             int command = sm.getCommand();
-            int key = sm.getData1();
-            String noteName = getNoteName(key % NUM_NOTES);
+            int key = sm.getData1() % NUM_NOTES;
+            String noteName = getNoteName(key);
             int velocity = sm.getData2();
 
             if (command == ShortMessage.NOTE_ON && velocity > 0) {
                 System.out.println("Note ON: " + noteName + " | Velocity: " + velocity);
-                noteNames.add(noteName);
+                noteNames.add(key);
                 try {
                     channel.noteOn(key, velocity);
                 } catch (NullPointerException e) {}
             } else if (command == ShortMessage.NOTE_OFF || (command == ShortMessage.NOTE_ON && velocity == 0)) {
                 System.out.println("Note OFF: " + noteName);
-                noteNames.remove(noteName);
+                noteNames.remove(key);
                 try {
                     channel.noteOff(key);
                 } catch (NullPointerException e) {}
@@ -75,7 +76,7 @@ public class MidiInputReceiver implements Receiver {
      * 
      * @return List of note names for the input currently being played.
      */
-    public ArrayList<String> getNoteNames() {
+    public Set<Integer> getNoteNames() {
         return noteNames;
     }
 

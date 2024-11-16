@@ -18,7 +18,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author this class represents the gameplay screen of the sightreading app game
+ * this class represents the gameplay screen of the sightreading app game
+ * 
+ * @author Lucas Arsenault
+ * @author 
  */
 public class GameController {
 
@@ -30,6 +33,7 @@ public class GameController {
     private Set<Integer> currentNotes;
     private List<Chord> currentMeasure;
     private int currentBeat;
+    private boolean isCorrect;
 
     private int timeRemaining;
     private int score;
@@ -57,27 +61,31 @@ public class GameController {
         currentBeat = 0;
         this.measureGenerator = measureGenerator;
         this.score = 0;
+        this.inputProcessor = new MidiInputProcessor();
+        this.isCorrect = true;
         newMeasure();
         startCountDown();
+        while (timeRemaining > 0) {
+            checkAnswer();
+        }
     }
 
     private void startCountDown(){
         countdownTimer = new Timeline(new KeyFrame(
-                Duration.seconds(1),
-                event -> {
-                    timeRemaining--;
-                    int minutes = timeRemaining / 60;
-                    int seconds = timeRemaining % 60;
-                    countDownLabel.setText(Integer.toString(minutes) + ":" + Integer.toString(seconds));
-                            if (timeRemaining <= 0) {
-                                countdownTimer.stop();
-                                moveToNextPage();
-                            }
-                        }
-                ));
-
-                countdownTimer.setCycleCount(Timeline.INDEFINITE);
-                countdownTimer.play();
+            Duration.seconds(1),
+            event -> {
+                timeRemaining--;
+                int minutes = timeRemaining / 60;
+                int seconds = timeRemaining % 60;
+                countDownLabel.setText(Integer.toString(minutes) + ":" + Integer.toString(seconds));
+                    if (timeRemaining <= 0) {
+                        countdownTimer.stop();
+                        moveToNextPage();
+                    }
+            }
+        ));
+        countdownTimer.setCycleCount(Timeline.INDEFINITE);
+        countdownTimer.play();
     }
 
 
@@ -90,10 +98,15 @@ public class GameController {
         return currentBeat == currentMeasure.size();
     }
 
-    private boolean correctChord(){
+    /**
+     * Compares the currently input set of notes to
+     * the correct set of notes for a single beat in
+     * a measure. If the measure is complete and
+     * the every beat input was correct, the score increments.
+     */
+    private boolean checkChord(){
+        currentBeat++;
         if(currentNotes.equals(currentMeasure.get(currentBeat).getNotes())){
-            currentBeat++;
-            this.score++;
             return true;
         }
         return false;
@@ -117,6 +130,33 @@ public class GameController {
 
     }
 
+    /**
+     * Returns the input from the user using a MIDI keyboard.
+     * 
+     * @return The set of integers representing notes pressed.
+     */
+    private Set<Integer> getInput() {
+        return inputProcessor.getInputs();
+    }
 
+    /**
+     * Checks the answer provided for a single beat
+     * to the correct answer for that single beat.
+     */
+    private void checkAnswer() {
+        currentNotes = getInput();
+        if (isCorrect) {
+            isCorrect = checkChord();
+        } else {
+            checkChord();
+        }
+
+        if (measureComplete()) {
+            if (isCorrect) {
+                score++;
+            }
+            newMeasure();
+        }
+    }
 
 }
