@@ -1,5 +1,9 @@
 package model;
+
 import javax.sound.midi.*;
+import java.util.ArrayList;
+import java.util.Set;
+
 /**
  * Takes in MIDI keyboard input, and translates it
  * to sound and a <set of> letter name values corresponding
@@ -19,16 +23,24 @@ public class MidiInputProcessor {
      * Channel for sending and receiving MIDI messages.
      */
     private MidiChannel channel;
-    private String  midiDevice;
 
     /**
-     * Constructor for a MIDIInputProcessor object.
-     * Initializes the device and synthesizer.
+     * Receiver for MIDI keyboard input.
+     */
+    private MidiInputReceiver receiver;
+
+    /**
+     * Device for MIDI keyboard.
+     */
+    private MidiDevice device;
+
+    /**
+     * Constructor for a MidiInputProcessor object.
+     * Initializes the device, receiver, and synthesizer.
      */
     public MidiInputProcessor() {
         // Initialize MIDI device
-        MidiDevice device;
-        MidiDevice.Info[] deviceInfo= MidiSystem.getMidiDeviceInfo();
+        MidiDevice.Info[] deviceInfo = MidiSystem.getMidiDeviceInfo();
         for(int i=0; i< deviceInfo.length;i++){
             try {
                 device = MidiSystem.getMidiDevice(deviceInfo[i]);
@@ -38,9 +50,8 @@ public class MidiInputProcessor {
                 System.out.println("Successfully connected to: " + deviceInfo[i]);
                 
                 // Set the MIDI input reciever to get MIDI data from the device 
-                MidiInputReceiver receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), channel);
+                receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), channel);
                 device.getTransmitter().setReceiver(receiver);
-                midiDevice= deviceInfo[i].getName();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -55,11 +66,23 @@ public class MidiInputProcessor {
             e.printStackTrace();
         }
     }
-    public String getDevice(){
-        return midiDevice;
+
+    /**
+     * Returns a list of notes currently being played as part of a chord.
+     * 
+     * @return List of notes currently played.
+     */
+    public Set<Integer> getInputs() {
+        return receiver.getNoteNames();
     }
-    public static void main(String[] args) {
-        new MidiInputProcessor();
+
+    /**
+     * Returns the MIDI device.
+     * 
+     * @return MIDI device.
+     */
+    public MidiDevice getDevice() {
+        return device;
     }
     
 }
