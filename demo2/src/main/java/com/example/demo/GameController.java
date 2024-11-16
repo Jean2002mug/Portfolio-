@@ -1,5 +1,9 @@
 package com.example.demo;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -12,10 +16,6 @@ import javafx.util.Duration;
 import model.Chord;
 import model.MeasureGenerator;
 import model.MidiInputProcessor;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 
 /**
  * this class represents the gameplay screen of the sightreading app game
@@ -65,9 +65,9 @@ public class GameController {
         this.isCorrect = true;
         newMeasure();
         startCountDown();
-        while (timeRemaining > 0) {
-            checkAnswer();
-        }
+        // while (timeRemaining > 0) {
+        //     checkAnswer();
+        // }
     }
 
     private void startCountDown(){
@@ -77,6 +77,7 @@ public class GameController {
                 timeRemaining--;
                 int minutes = timeRemaining / 60;
                 int seconds = timeRemaining % 60;
+                checkForInput();
                 countDownLabel.setText(Integer.toString(minutes) + ":" + Integer.toString(seconds));
                     if (timeRemaining <= 0) {
                         countdownTimer.stop();
@@ -91,7 +92,7 @@ public class GameController {
 
     private void newMeasure(){
         this.currentMeasure = this.measureGenerator.nextMeasure(minComplexity, maxComplexity);
-        chordLabel.setText(currentMeasure.get(currentBeat).toString());
+        chordLabel.setText(currentMeasure.get(currentBeat).getNotes().toString());
     }
 
     private boolean measureComplete(){
@@ -105,11 +106,19 @@ public class GameController {
      * the every beat input was correct, the score increments.
      */
     private boolean checkChord(){
-        currentBeat++;
+        
         if(currentNotes.equals(currentMeasure.get(currentBeat).getNotes())){
+            currentBeat++;
             return true;
         }
         return false;
+    }
+
+
+    public  void checkForInput(){
+        while(timeRemaining >= 0){
+            checkAnswer();
+        }
     }
 
     private void  moveToNextPage(){
@@ -145,6 +154,7 @@ public class GameController {
      */
     private void checkAnswer() {
         currentNotes = getInput();
+        System.out.println("InputProcessor:  "   + currentNotes.toString());
         if (isCorrect) {
             isCorrect = checkChord();
         } else {

@@ -1,11 +1,11 @@
 package model;
 
+import java.util.Set;
+
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
-import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Receives the MIDI message, and translates the raw
@@ -51,14 +51,14 @@ public class MidiInputReceiver implements Receiver {
             int velocity = sm.getData2();
 
             if (command == ShortMessage.NOTE_ON && velocity > 0) {
-                System.out.println("Note ON: " + noteName + " | Velocity: " + velocity);
-                noteNames.add(key);
+                System.out.println("Note ON: " + key + " | Velocity: " + velocity);
+                //noteNames.add(key);
                 try {
                     channel.noteOn(key, velocity);
                 } catch (NullPointerException e) {}
             } else if (command == ShortMessage.NOTE_OFF || (command == ShortMessage.NOTE_ON && velocity == 0)) {
-                System.out.println("Note OFF: " + noteName);
-                noteNames.remove(key);
+                System.out.println("Note OFF: " + key);
+                //noteNames.remove(key);
                 try {
                     channel.noteOff(key);
                 } catch (NullPointerException e) {}
