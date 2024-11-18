@@ -9,8 +9,6 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
 
-import javafx.scene.Node;
-
 /**
  * Takes in MIDI keyboard input, and translates it
  * to sound and a <set of> letter name values corresponding
@@ -47,7 +45,7 @@ public class MidiInputProcessor {
      * Constructor for a MidiInputProcessor object.
      * Initializes the device, receiver, and synthesizer.
      */
-    public MidiInputProcessor(Node eventTarget) {
+    public MidiInputProcessor() {
         // Initialize MIDI device
         MidiDevice.Info[] deviceInfo = MidiSystem.getMidiDeviceInfo();
         for(int i=0; i< deviceInfo.length;i++){
@@ -60,7 +58,7 @@ public class MidiInputProcessor {
                 
                 // Set the MIDI input reciever to get MIDI data from the device 
                 receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), channel);
-                receiver.setEventTarget(eventTarget);
+               
                 receiver.setNoteNames(noteNames);
                 device.getTransmitter().setReceiver(receiver);
             } catch (Exception e) {
