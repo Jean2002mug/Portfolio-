@@ -24,6 +24,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Chord;
@@ -43,14 +45,14 @@ public class GameController {
     private int minComplexity;
     private int maxComplexity;
     private Set<Integer> currentNotes = new HashSet<>();
-    private List<Chord> currentMeasure =new ArrayList<>();
+    public List<Chord> currentMeasure =new ArrayList<>();
     private int currentBeat;
     private boolean isCorrect;
 
-    private int timeRemaining;
+    public int timeRemaining;
     private int score;
 
-    private Timeline countdownTimer;
+    public Timeline countdownTimer;
     private Timeline inputCheckTimeline;
     private Stage stage;
 
@@ -65,6 +67,8 @@ public class GameController {
         this.stage = stage;
     }
 
+    @FXML
+    private ImageView noteView;
 
 
     private void startCountDown(){
@@ -89,7 +93,11 @@ public class GameController {
 
     private void newMeasure(){
         this.currentMeasure = this.measureGenerator.nextMeasure(minComplexity, maxComplexity);
-        Platform.runLater(()-> chordLabel.setText(currentMeasure.get(currentBeat).getNotes().toString()));
+        Platform.runLater(()->{
+            String note = currentMeasure.get(0).getRootNoteName();
+            Image image = new Image(getClass().getResource("/noteImages/" + note + ".png").toExternalForm());
+            noteView.setImage(image);
+        });
     }
 
     private boolean measureComplete(){

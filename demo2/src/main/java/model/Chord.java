@@ -107,6 +107,10 @@ public class Chord {
         return this.noteName;
     }
 
+    public String getRootNoteName(){
+        return numToLetterSharps[rootNote % 12];
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
