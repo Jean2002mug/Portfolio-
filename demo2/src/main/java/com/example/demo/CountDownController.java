@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.MeasureGenerator;
 
 public class CountDownController {
 
@@ -49,16 +48,12 @@ public class CountDownController {
 
     private void  moveToNextPage(){
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("game-core-view.fxml"));
             Parent root = loader.load();
-
             GameController controller = loader.getController();
-            controller.initialize(
-                    new MeasureGenerator(1, 11, 1,4),
-                    0,1, 200);
             controller.setStage(stage);
-            //stage.setOnShown(event -> controller.checkForInput());
+            System.err.println("");
+        
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

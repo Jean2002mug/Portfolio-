@@ -1,6 +1,10 @@
 package model;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * @author Ogheneovo Grant-Oyeye
@@ -71,7 +75,7 @@ public class Chord {
 
         String chord = possibleChords.get(random.nextInt(possibleChords.size()));
 
-        this.notes = new TreeSet<>();
+        this.notes = new HashSet<>();
 
         for (Integer interval : intervals.get(chord)) {
             //only add notes within bounds
