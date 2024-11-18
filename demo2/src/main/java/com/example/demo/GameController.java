@@ -63,6 +63,9 @@ public class GameController {
     private Label chordLabel;
 
     @FXML
+    private Label scoreLabel;
+
+    @FXML
     public void setStage(Stage stage){
         this.stage = stage;
     }
@@ -125,7 +128,7 @@ public class GameController {
     //     this.timeRemaining = 200;
         currentBeat = 0;
         this.measureGenerator =  new MeasureGenerator(1, 11, 1,4);
-    //     this.score = 0;
+        this.score = 0;
     //     System.out.println("Game Controller" + stage.getScene().getRoot());
     //     this.isCorrect = true;
     //     currentNotes = new HashSet<>();
@@ -153,6 +156,13 @@ public class GameController {
         inputCheckTimeline= new Timeline(new KeyFrame( Duration.millis(100), event -> checkAnswer()));
         inputCheckTimeline.setCycleCount(Timeline.INDEFINITE);
         inputCheckTimeline.play();
+    }
+
+    private void incrementScore(){
+        score++;
+        Platform.runLater(() -> {
+            scoreLabel.setText("Score: " + score);
+        });
     }
 
 
@@ -283,6 +293,9 @@ private  class MidiInputReceiver implements Receiver {
                 System.out.println("Note ON: " + key + " | Velocity: " + velocity);
                 currentNotes.add(key);
                 if (currentNotes.equals(currentMeasure.get(0).getNotes())){
+                    incrementScore();
+                    newMeasure();
+                } else {
                     newMeasure();
                 }
   

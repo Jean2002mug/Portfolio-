@@ -31,8 +31,8 @@ public class Chord {
             MAJOR, List.of(0, 4, 7),
             MINOR, List.of(0, 3, 7)
     );
-    String[] numToLetterSharps = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
-    String[] numToLetterFlats = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "G", "Ab", "A", "Bb", "B"};
+    String[] numToLetterSharps = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C"};
+    String[] numToLetterFlats = {"Db", "D", "Eb", "E", "F", "Gb", "G", "G", "Ab", "A", "Bb", "B", "C"};
 
     private int rootNote;
     private int duration;
