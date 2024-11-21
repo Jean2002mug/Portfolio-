@@ -10,7 +10,6 @@ import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
@@ -40,6 +39,7 @@ import model.MeasureGenerator;
 public class GameController {
 
     private MidiInputReceiver receiver;
+    private MidiDevice device ;
     private MeasureGenerator measureGenerator;
 
     private int minComplexity;
@@ -229,21 +229,17 @@ public class GameController {
                 System.out.println("Successfully connected to: " + deviceInfo[i]);
                 
                 // Set the MIDI input reciever to get MIDI data from the device 
-                receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), null);
+                Synthesizer synthesizer = MidiSystem.getSynthesizer();
+                synthesizer.open();
+                MidiChannel channel = synthesizer.getChannels()[0];
+                receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), channel);
                 device.getTransmitter().setReceiver(receiver);
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        // Initialize MIDI synthesizer
-        try {
-            Synthesizer synthesizer = MidiSystem.getSynthesizer();
-            synthesizer.open();
-            MidiChannel channel = synthesizer.getChannels()[0];
-        } catch (MidiUnavailableException e) {
-            e.printStackTrace();
-        }
     }
 
     
