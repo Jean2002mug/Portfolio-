@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import java.io.IOException;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -9,9 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.MeasureGenerator;
-
-import java.io.IOException;
 
 public class CountDownController {
 
@@ -49,15 +48,12 @@ public class CountDownController {
 
     private void  moveToNextPage(){
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("game-core-view.fxml"));
             Parent root = loader.load();
-
             GameController controller = loader.getController();
-            controller.initialize(
-                    new MeasureGenerator(20, 30, 1,4),
-                    0,1, 5);
             controller.setStage(stage);
+            System.err.println("");
+        
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

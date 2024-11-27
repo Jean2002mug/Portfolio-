@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 
-<?import javafx.scene.control.Label?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.GameController">
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.GameController">
    <children>
-      <Label fx:id="countDownLabel" layoutX="300.0" layoutY="100" prefHeight="114.0" prefWidth="103.0"></Label>
-      <Label fx:id="chordLabel"  layoutX="300.0" layoutY="153.0" prefHeight="114.0" prefWidth="103.0"></Label>
+      <Label fx:id="chordLabel" layoutX="650.0" layoutY="153.0" prefHeight="114.0" prefWidth="103.0" />
+   <Label fx:id="scoreLabel" layoutX="550" layoutY="25" prefHeight="114.0" prefWidth="150.0" text="Score: 0">
+
+            <font>
+                <Font size="36.0" />
+            </font>
+         </Label>
+         <ImageView fx:id="noteView" fitHeight="400.0" fitWidth="800.0" layoutX="200.0" layoutY="107.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

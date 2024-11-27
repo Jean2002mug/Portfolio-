@@ -1,6 +1,10 @@
 package model;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * @author Ogheneovo Grant-Oyeye
@@ -27,8 +31,8 @@ public class Chord {
             MAJOR, List.of(0, 4, 7),
             MINOR, List.of(0, 3, 7)
     );
-    String[] numToLetterSharps = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
-    String[] numToLetterFlats = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "G", "Ab", "A", "Bb", "B"};
+    String[] numToLetterSharps = {"C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C"};
+    String[] numToLetterFlats = {"Db", "D", "Eb", "E", "F", "Gb", "G", "G", "Ab", "A", "Bb", "B", "C"};
 
     private int rootNote;
     private int duration;
@@ -71,7 +75,7 @@ public class Chord {
 
         String chord = possibleChords.get(random.nextInt(possibleChords.size()));
 
-        this.notes = new TreeSet<>();
+        this.notes = new HashSet<>();
 
         for (Integer interval : intervals.get(chord)) {
             //only add notes within bounds
@@ -101,6 +105,10 @@ public class Chord {
 
     public String noteName() {
         return this.noteName;
+    }
+
+    public String getRootNoteName(){
+        return numToLetterSharps[rootNote % 12];
     }
 
     @Override

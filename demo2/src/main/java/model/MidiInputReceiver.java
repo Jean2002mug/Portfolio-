@@ -1,11 +1,14 @@
 package model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
-import java.util.ArrayList;
-import java.util.Set;
+
+import javafx.scene.Node;
 
 /**
  * Receives the MIDI message, and translates the raw
@@ -29,7 +32,9 @@ public class MidiInputReceiver implements Receiver {
     /**
      * List of note names for the inputs currently played.
      */
-    private Set<Integer> noteNames;
+    private Set<Integer> noteNames = new HashSet<>();
+
+    private Node eventTarget;
 
     /**
      * Constructs an input receiver.
@@ -39,7 +44,11 @@ public class MidiInputReceiver implements Receiver {
      */
     public MidiInputReceiver(String name, MidiChannel channel) {
         this.channel = channel;
+        this.eventTarget = eventTarget;
     }
+
+   
+
 
     @Override
     public void send(MidiMessage message, long timeStamp) {
@@ -51,14 +60,17 @@ public class MidiInputReceiver implements Receiver {
             int velocity = sm.getData2();
 
             if (command == ShortMessage.NOTE_ON && velocity > 0) {
-                System.out.println("Note ON: " + noteName + " | Velocity: " + velocity);
+                System.out.println("Note ON: " + key + " | Velocity: " + velocity);
                 noteNames.add(key);
+
                 try {
                     channel.noteOn(key, velocity);
                 } catch (NullPointerException e) {}
             } else if (command == ShortMessage.NOTE_OFF || (command == ShortMessage.NOTE_ON && velocity == 0)) {
-                System.out.println("Note OFF: " + noteName);
+                System.out.println("Note OFF: " + key);
                 noteNames.remove(key);
+                noteNames.add(key);
+            
                 try {
                     channel.noteOff(key);
                 } catch (NullPointerException e) {}
@@ -116,5 +128,13 @@ public class MidiInputReceiver implements Receiver {
             noteName = "B";
         }
         return noteName;
+    }
+
+    public void setNoteNames(Set<Integer> noteNames) {
+      this.noteNames = noteNames;
+    }
+
+    public void setEventTarget(Node eventTarget) {
+        this.eventTarget = eventTarget;
     }
 }

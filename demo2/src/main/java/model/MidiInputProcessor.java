@@ -1,8 +1,13 @@
 package model;
 
-import javax.sound.midi.*;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
+
+import javax.sound.midi.MidiChannel;
+import javax.sound.midi.MidiDevice;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Synthesizer;
 
 /**
  * Takes in MIDI keyboard input, and translates it
@@ -34,6 +39,8 @@ public class MidiInputProcessor {
      */
     private MidiDevice device;
 
+    private Set<Integer> noteNames = new HashSet<>();
+
     /**
      * Constructor for a MidiInputProcessor object.
      * Initializes the device, receiver, and synthesizer.
@@ -51,6 +58,8 @@ public class MidiInputProcessor {
                 
                 // Set the MIDI input reciever to get MIDI data from the device 
                 receiver = new MidiInputReceiver(device.getDeviceInfo().toString(), channel);
+               
+                receiver.setNoteNames(noteNames);
                 device.getTransmitter().setReceiver(receiver);
             } catch (Exception e) {
                 e.printStackTrace();
