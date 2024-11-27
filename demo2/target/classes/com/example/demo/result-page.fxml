@@ -2,15 +2,23 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.ResultPageController">
+<AnchorPane prefHeight="600.0" prefWidth="1200" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.ResultPageController">
    <children>
-      <Label fx:id="scoreLabel" text="Label" layoutX="300.0" layoutY="153.0" prefHeight="114.0" prefWidth="103.0">
+      <Label layoutX="560" layoutY="100" prefHeight="114.0" prefWidth="150.0" text="Score">
+         <font>
+         <Font size="50" />
+         </font>
+      </Label>
+
+      <Label fx:id="scoreLabel" layoutX="600" layoutY="153.0" prefHeight="114.0" prefWidth="103.0" text="Label" textAlignment="JUSTIFY">
          <font>
          <Font size="53.0" />
       </font>
       </Label>
+      <Button layoutX="560" layoutY="270" prefWidth="120"  onAction="#moveToNextPage" text="home">
+      </Button>
+
    </children>
 </AnchorPane>

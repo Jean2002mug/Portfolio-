@@ -47,20 +47,16 @@ public class GameController {
     private Set<Integer> currentNotes = new HashSet<>();
     public List<Chord> currentMeasure =new ArrayList<>();
     private int currentBeat;
-    private boolean isCorrect;
 
     public int timeRemaining;
     private int score;
 
     public Timeline countdownTimer;
-    private Timeline inputCheckTimeline;
     private Stage stage;
 
     @FXML
     private Label countDownLabel;
 
-    @FXML
-    private Label chordLabel;
 
     @FXML
     private Label scoreLabel;
@@ -81,8 +77,11 @@ public class GameController {
                 timeRemaining--;
                 int minutes = timeRemaining / 60;
                 int seconds = timeRemaining % 60;
-                //checkForInput();
-                countDownLabel.setText(Integer.toString(minutes) + ":" + Integer.toString(seconds));
+                String minutesString = Integer.toString(minutes);
+                String secondsString = seconds < 10 ? "0" + Integer.toString(seconds) : Integer.toString(seconds);
+                Platform.runLater(() -> {
+                    countDownLabel.setText("Time: " + minutesString + ":" + secondsString);
+                });
                     if (timeRemaining <= 0) {
                         countdownTimer.stop();
                         moveToNextPage();
@@ -92,7 +91,6 @@ public class GameController {
         countdownTimer.setCycleCount(Timeline.INDEFINITE);
         countdownTimer.play();
     }
-
 
     private void newMeasure(){
         this.currentMeasure = this.measureGenerator.nextMeasure(minComplexity, maxComplexity);
@@ -125,38 +123,14 @@ public class GameController {
    public void initialize(){
         this.minComplexity = 0;
         this.maxComplexity = 0;
-    //     this.timeRemaining = 200;
+        this.timeRemaining = 60;
         currentBeat = 0;
         this.measureGenerator =  new MeasureGenerator(1, 11, 1,4);
         this.score = 0;
-    //     System.out.println("Game Controller" + stage.getScene().getRoot());
-    //     this.isCorrect = true;
-    //     currentNotes = new HashSet<>();
-           newMeasure();
-    //     Platform.runLater( () ->{
-    //         Parent root = stage.getScene().getRoot();
-    //     root.addEventHandler(NoteEvent.NOTE_PLAYED, event -> {
-    //         int noteKey = event.getNoteKey();
-    //         int velocity = event.getVelocity();
-    //         System.out.println("Note played: Key " + noteKey + ", Velocity " + velocity);
-
-    //         // Handle the note input (for example, check if it's correct)
-    //         currentNotes.add(noteKey); // Add the note to the set of current notes
-    //         checkAnswer(); // Check if the input matches the correct answer
-    //     });
-
-    // });
-   
-    setupMidi();
-    
-
+        newMeasure();
+        setupMidi();
+        startCountDown();
    }
-    
-    private void startInputChecking(){
-        inputCheckTimeline= new Timeline(new KeyFrame( Duration.millis(100), event -> checkAnswer()));
-        inputCheckTimeline.setCycleCount(Timeline.INDEFINITE);
-        inputCheckTimeline.play();
-    }
 
     private void incrementScore(){
         score++;
@@ -174,6 +148,7 @@ public class GameController {
 
             ResultPageController controller = loader.getController();
             controller.scoreLabel(this.score);
+            controller.setStage(stage);
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -184,40 +159,6 @@ public class GameController {
 
     }
 
-    /**
-     * Returns the input from the user using a MIDI keyboard.
-     * 
-     * @return The set of integers representing notes pressed.
-     */
-    // private Set<Integer> getInput() {
-    //     return inputProcessor.getInputs();
-    // }
-
-    /**
-     * Checks the answer provided for a single beat
-     * to the correct answer for that single beat.
-     */
-    private void checkAnswer() {
-        if (currentNotes == null || currentNotes.isEmpty()) {
-            System.out.println("No input detected or currentNotes is null.");
-            return;
-        }
-        // currentNotes = getInput();
-        System.out.println("InputProcessor:  "   + currentNotes.toString());
-        if (isCorrect) {
-            isCorrect = checkChord();
-        } 
-        else {
-             checkChord();
-         }
-
-        if (measureComplete()) {
-            if (isCorrect) {
-                score++;
-            }
-            newMeasure();
-        }
-    }
     private void setupMidi(){
         MidiDevice.Info[] deviceInfo = MidiSystem.getMidiDeviceInfo();
         for(int i=0; i< deviceInfo.length;i++){
