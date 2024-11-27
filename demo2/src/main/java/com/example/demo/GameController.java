@@ -280,12 +280,13 @@ private  class MidiInputReceiver implements Receiver {
     public void send(MidiMessage message, long timeStamp) {
         if (message instanceof ShortMessage) {
             ShortMessage sm = (ShortMessage) message;
-            if (sm.getCommand() >= 0xE0 && sm.getCommand() <= 0xEF) {
+            // Case of pressing PB1 or PB2 for pitch bending. 
+            if (sm.getCommand() >= 0xE0 && sm.getCommand() <= 0xEF) {// if the button pressed is PB1 or PB2 then ignore it 
                 System.out.println("Pitch Bend message ignored");
                 return;
             }
 
-            if (sm.getCommand() == 0xB0) {
+            if (sm.getCommand() == 0xB0) {// This ignores the pressing of PB1 or PB2 for any modification except pitch bending .
                 int controllerNumber = sm.getData1(); // Controller number
                 if (isPB1OrPB2Controller(controllerNumber)) {
                     System.out.println("Control Change message from PB1/PB2 ignored");
@@ -329,8 +330,8 @@ private  class MidiInputReceiver implements Receiver {
         // Implement close if needed for resource management
     }
     private boolean isPB1OrPB2Controller(int controllerNumber) {
-        // PB1/PB2 controller numbers may vary; adjust these based on MIDI documentation or testing
-        return controllerNumber == 1 || controllerNumber == 2; // Example: 1 and 2 for PB1/PB2
+        // PB1/PB2 controller numbers may vary; this decides whether the button pressed is PB1 or PB2.
+        return controllerNumber == 1 || controllerNumber == 2; 
     }
 
     /**
