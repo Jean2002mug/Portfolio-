@@ -234,7 +234,8 @@ private  class MidiInputReceiver implements Receiver {
                 }
             }
             int command = sm.getCommand();
-            int key = sm.getData1() % NUM_NOTES;
+            int rawkey = sm.getData1() ;
+            int key=sm.getData1() % NUM_NOTES;
             String noteName = getNoteName(key);
             int velocity = sm.getData2();
 
@@ -251,7 +252,7 @@ private  class MidiInputReceiver implements Receiver {
 
                
                 try {
-                    channel.noteOn(key, velocity);
+                    channel.noteOn(rawkey, velocity);
                 } catch (NullPointerException e) {}
             } else if (command == ShortMessage.NOTE_OFF || (command == ShortMessage.NOTE_ON && velocity == 0)) {
                 System.out.println("Note OFF: " + key);
@@ -259,7 +260,7 @@ private  class MidiInputReceiver implements Receiver {
                 
             
                 try {
-                    channel.noteOff(key);
+                    channel.noteOff(rawkey);
                 } catch (NullPointerException e) {}
             }
         }
