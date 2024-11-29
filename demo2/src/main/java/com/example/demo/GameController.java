@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiDevice;
@@ -16,6 +15,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -222,11 +222,8 @@ public class GameController {
             } else {
                 feedbackView.setImage(new Image(getClass().getResource("/feedbackImages/incorrect.png").toExternalForm()));
             }
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.play();
             feedbackView.setImage(null);
             newMeasure();
         }
