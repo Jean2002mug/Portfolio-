@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.MeasureGenerator;
 
 public class CountDownController {
 
@@ -23,7 +24,16 @@ public class CountDownController {
     private int timeRemaining = COUNTDOWN_SECONDS;
     private Stage stage;
 
+    private int minComplexity;
+    private int maxComplexity;
+    private MeasureGenerator generator;
 
+
+    public void setState(int minComplexity, int maxComplexity, MeasureGenerator generator){
+        this.minComplexity = minComplexity;
+        this.maxComplexity = maxComplexity;
+        this.generator = generator;
+    }
     @FXML
     public void setStage(Stage stage){
         this.stage = stage;
@@ -52,7 +62,6 @@ public class CountDownController {
             Parent root = loader.load();
             GameController controller = loader.getController();
             controller.setStage(stage);
-            System.err.println("");
         
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -63,7 +72,7 @@ public class CountDownController {
         }
 
     }
-    @FXML
+
     public void startCountdown() {
         timeRemaining = COUNTDOWN_SECONDS; // Reset countdown
         timeline.playFromStart();
