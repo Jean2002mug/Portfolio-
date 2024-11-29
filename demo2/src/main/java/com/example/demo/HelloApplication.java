@@ -9,13 +9,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class HelloApplication extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("game-core-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("level-select-page.fxml"));
         Parent root = fxmlLoader.load();
-        GameController controller = fxmlLoader.getController();
+        LevelSelectPageController controller = fxmlLoader.getController();
         controller.setStage(stage);
-        Scene scene = new Scene(root, 1200, 580);
+        Scene scene = new Scene(root, 1200, 600);
         stage.setTitle("Sight-reading App");
         stage.setScene(scene);
         stage.show();

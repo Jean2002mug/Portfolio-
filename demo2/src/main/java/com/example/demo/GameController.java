@@ -48,20 +48,16 @@ public class GameController {
     private Set<Integer> currentNotes = new HashSet<>();
     public List<Chord> currentMeasure =new ArrayList<>();
     private int currentBeat;
-    private boolean isCorrect;
 
     public int timeRemaining;
     private int score;
 
     public Timeline countdownTimer;
-    private Timeline inputCheckTimeline;
     private Stage stage;
 
     @FXML
     private Label countDownLabel;
 
-    @FXML
-    private Label chordLabel;
 
     @FXML
     private Label scoreLabel;
@@ -85,8 +81,11 @@ public class GameController {
                 timeRemaining--;
                 int minutes = timeRemaining / 60;
                 int seconds = timeRemaining % 60;
-                //checkForInput();
-                countDownLabel.setText(Integer.toString(minutes) + ":" + Integer.toString(seconds));
+                String minutesString = Integer.toString(minutes);
+                String secondsString = seconds < 10 ? "0" + Integer.toString(seconds) : Integer.toString(seconds);
+                Platform.runLater(() -> {
+                    countDownLabel.setText("Time: " + minutesString + ":" + secondsString);
+                });
                     if (timeRemaining <= 0) {
                         countdownTimer.stop();
                         moveToNextPage();
@@ -96,7 +95,6 @@ public class GameController {
         countdownTimer.setCycleCount(Timeline.INDEFINITE);
         countdownTimer.play();
     }
-
 
     private void newMeasure(){
         this.currentMeasure = this.measureGenerator.nextMeasure(minComplexity, maxComplexity);
@@ -129,7 +127,7 @@ public class GameController {
    public void initialize(){
         this.minComplexity = 0;
         this.maxComplexity = 0;
-    //     this.timeRemaining = 200;
+        this.timeRemaining = 60;
         currentBeat = 0;
         this.measureGenerator =  new MeasureGenerator(1, 11, 1,4);
         this.score = 0;
@@ -154,6 +152,12 @@ public class GameController {
     setupMidi();
     
 
+   }
+    
+    private void startInputChecking(){
+        inputCheckTimeline= new Timeline(new KeyFrame( Duration.millis(100), event -> checkAnswer()));
+        inputCheckTimeline.setCycleCount(Timeline.INDEFINITE);
+        inputCheckTimeline.play();
     }
 
     private void incrementScore(){
@@ -172,6 +176,7 @@ public class GameController {
 
             ResultPageController controller = loader.getController();
             controller.scoreLabel(this.score);
+            controller.setStage(stage);
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -258,7 +263,8 @@ private  class MidiInputReceiver implements Receiver {
                 }
             }
             int command = sm.getCommand();
-            int key = sm.getData1() % NUM_NOTES;
+            int rawkey = sm.getData1() ;
+            int key=sm.getData1() % NUM_NOTES;
             String noteName = getNoteName(key);
             int velocity = sm.getData2();
 
@@ -287,7 +293,7 @@ private  class MidiInputReceiver implements Receiver {
                 pause.play();
                
                 try {
-                    channel.noteOn(key, velocity);
+                    channel.noteOn(rawkey, velocity);
                 } catch (NullPointerException e) {}
             } else if (command == ShortMessage.NOTE_OFF || (command == ShortMessage.NOTE_ON && velocity == 0)) {
                 System.out.println("Note OFF: " + key);
@@ -295,7 +301,7 @@ private  class MidiInputReceiver implements Receiver {
                 
             
                 try {
-                    channel.noteOff(key);
+                    channel.noteOff(rawkey);
                 } catch (NullPointerException e) {}
             }
         }
