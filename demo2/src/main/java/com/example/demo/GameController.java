@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiDevice;
@@ -72,6 +73,9 @@ public class GameController {
 
     @FXML
     private ImageView noteView;
+
+    @FXML
+    private ImageView feedbackView;
 
 
     private void startCountDown(){
@@ -213,8 +217,17 @@ public class GameController {
 
         if (measureComplete()) {
             if (isCorrect) {
+                feedbackView.setImage(new Image(getClass().getResource("/feedbackImages/correct.png").toExternalForm()));
                 score++;
+            } else {
+                feedbackView.setImage(new Image(getClass().getResource("/feedbackImages/incorrect.png").toExternalForm()));
             }
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            feedbackView.setImage(null);
             newMeasure();
         }
     }

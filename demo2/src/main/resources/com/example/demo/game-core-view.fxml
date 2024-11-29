@@ -16,5 +16,6 @@
             </font>
          </Label>
          <ImageView fx:id="noteView" fitHeight="400.0" fitWidth="800.0" layoutX="200.0" layoutY="107.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="feedbackView" fitHeight="100.0" fitWidth="100.0" layoutX="400.0" layoutY="107.0" preserveRatio="true" />
    </children>
 </AnchorPane>
