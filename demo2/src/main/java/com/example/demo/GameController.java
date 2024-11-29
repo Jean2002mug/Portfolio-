@@ -15,6 +15,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -50,6 +51,7 @@ public class GameController {
 
     public int timeRemaining;
     private int score;
+    private int totalMeasures;
 
     public Timeline countdownTimer;
     private Stage stage;
@@ -68,6 +70,9 @@ public class GameController {
 
     @FXML
     private ImageView noteView;
+
+    @FXML
+    private ImageView feedbackView;
 
 
     private void startCountDown(){
@@ -130,7 +135,7 @@ public class GameController {
         newMeasure();
         setupMidi();
         startCountDown();
-   }
+    }
 
     private void incrementScore(){
         score++;
@@ -244,13 +249,25 @@ private  class MidiInputReceiver implements Receiver {
                 System.out.println("Note ON: " + key + " | Velocity: " + velocity);
                 currentNotes.add(key);
                 if (currentNotes.equals(currentMeasure.get(0).getNotes())){
+                    Image image = new Image(getClass().getResource("/feedbackImages/correct.png").toExternalForm());
+                    feedbackView.setImage(image);
                     incrementScore();
-                    newMeasure();
                 } else {
-                    newMeasure();
+                    Image image = new Image(getClass().getResource("/feedbackImages/incorrect.jpg").toExternalForm());
+                    feedbackView.setImage(image);
                 }
-  
 
+                PauseTransition pause = new PauseTransition(Duration.millis(500));
+
+                // After the pause, clear the feedback image
+                pause.setOnFinished(event -> {
+                    Platform.runLater(() -> {
+                        feedbackView.setImage(null);
+                    });
+                });
+
+                newMeasure();
+                pause.play();
                
                 try {
                     channel.noteOn(rawkey, velocity);
