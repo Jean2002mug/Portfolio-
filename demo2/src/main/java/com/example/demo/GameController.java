@@ -51,6 +51,7 @@ public class GameController {
 
     public int timeRemaining;
     private int score;
+    private int totalMeasures;
 
     public Timeline countdownTimer;
     private Stage stage;
@@ -131,33 +132,9 @@ public class GameController {
         currentBeat = 0;
         this.measureGenerator =  new MeasureGenerator(1, 11, 1,4);
         this.score = 0;
-    //     System.out.println("Game Controller" + stage.getScene().getRoot());
-    //     this.isCorrect = true;
-    //     currentNotes = new HashSet<>();
-           newMeasure();
-    //     Platform.runLater( () ->{
-    //         Parent root = stage.getScene().getRoot();
-    //     root.addEventHandler(NoteEvent.NOTE_PLAYED, event -> {
-    //         int noteKey = event.getNoteKey();
-    //         int velocity = event.getVelocity();
-    //         System.out.println("Note played: Key " + noteKey + ", Velocity " + velocity);
-
-    //         // Handle the note input (for example, check if it's correct)
-    //         currentNotes.add(noteKey); // Add the note to the set of current notes
-    //         checkAnswer(); // Check if the input matches the correct answer
-    //     });
-
-    // });
-   
-    setupMidi();
-    
-
-   }
-    
-    private void startInputChecking(){
-        inputCheckTimeline= new Timeline(new KeyFrame( Duration.millis(100), event -> checkAnswer()));
-        inputCheckTimeline.setCycleCount(Timeline.INDEFINITE);
-        inputCheckTimeline.play();
+        newMeasure();
+        setupMidi();
+        startCountDown();
     }
 
     private void incrementScore(){

@@ -6,10 +6,10 @@
 <AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.LevelSelectPageController">
    <children>
       <Button onAction="#levelOne" layoutX="180.0" layoutY="85" mnemonicParsing="false" prefHeight="160" prefWidth="160" text="1" />
-      <Button onAction="#levelTwo" layoutX="500.0" layoutY="330.0" mnemonicParsing="false" prefHeight="160" prefWidth="160" text="2" />
+      <Button onAction="#levelTwo" layoutX="500.0" layoutY="85.0" mnemonicParsing="false" prefHeight="160" prefWidth="160" text="2" />
       <Button layoutX="840.0" layoutY="85.0" mnemonicParsing="false" prefHeight="160" prefWidth="160" text="3" />
       <Button layoutX="180.0" layoutY="330.0" mnemonicParsing="false" prefHeight="160" prefWidth="160" text="4" />
-      <Button layoutX="500.0" layoutY="85.0" mnemonicParsing="false" prefHeight="160" prefWidth="160" text="5" />
+      <Button layoutX="500.0" layoutY="330.0" mnemonicParsing="false" prefHeight="160" prefWidth="160" text="5" />
       <Button layoutX="840.0" layoutY="330.0" mnemonicParsing="false" prefHeight="160" prefWidth="160" text="6" />
    </children>
 </AnchorPane>

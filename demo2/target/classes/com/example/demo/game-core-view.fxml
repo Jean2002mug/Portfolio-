@@ -23,5 +23,6 @@
 
 
          <ImageView fx:id="noteView" fitHeight="400.0" fitWidth="800.0" layoutX="200.0" layoutY="107.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="feedbackView" fitHeight="125.0" fitWidth="125.0" layoutX="1000.0" layoutY="250.0" preserveRatio="true" />
    </children>
 </AnchorPane>
