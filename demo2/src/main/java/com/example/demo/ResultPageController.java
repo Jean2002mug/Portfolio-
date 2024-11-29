@@ -13,6 +13,9 @@ public class ResultPageController {
     @FXML
     Label scoreLabel;
 
+    @FXML
+    Label accuracyLabel;
+
     Stage stage;
 
 
@@ -27,6 +30,10 @@ public class ResultPageController {
 
     public void scoreLabel(int score) {
         scoreLabel.setText(Integer.toString(score));
+    }
+
+    public void accuracyLabel(int score, int totalMeasures) {
+        accuracyLabel.setText(Integer.toString((int)((double)score / (double)totalMeasures * 100)) + "%");
     }
 
     public void moveToNextPage(){

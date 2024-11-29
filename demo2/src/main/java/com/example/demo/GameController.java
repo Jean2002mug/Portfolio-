@@ -153,6 +153,7 @@ public class GameController {
 
             ResultPageController controller = loader.getController();
             controller.scoreLabel(this.score);
+            controller.accuracyLabel(this.score, this.totalMeasures);
             controller.setStage(stage);
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -267,6 +268,7 @@ private  class MidiInputReceiver implements Receiver {
                 });
 
                 newMeasure();
+                totalMeasures++;
                 pause.play();
                
                 try {
