@@ -154,12 +154,6 @@ public class GameController {
     setupMidi();
     
 
-   }
-    
-    private void startInputChecking(){
-        inputCheckTimeline= new Timeline(new KeyFrame( Duration.millis(100), event -> checkAnswer()));
-        inputCheckTimeline.setCycleCount(Timeline.INDEFINITE);
-        inputCheckTimeline.play();
     }
 
     private void incrementScore(){
@@ -188,46 +182,6 @@ public class GameController {
 
     }
 
-    /**
-     * Returns the input from the user using a MIDI keyboard.
-     * 
-     * @return The set of integers representing notes pressed.
-     */
-    // private Set<Integer> getInput() {
-    //     return inputProcessor.getInputs();
-    // }
-
-    /**
-     * Checks the answer provided for a single beat
-     * to the correct answer for that single beat.
-     */
-    private void checkAnswer() {
-        if (currentNotes == null || currentNotes.isEmpty()) {
-            System.out.println("No input detected or currentNotes is null.");
-            return;
-        }
-        // currentNotes = getInput();
-        System.out.println("InputProcessor:  "   + currentNotes.toString());
-        if (isCorrect) {
-            isCorrect = checkChord();
-        } 
-        else {
-             checkChord();
-         }
-
-        if (measureComplete()) {
-            if (isCorrect) {
-                feedbackView.setImage(new Image(getClass().getResource("/feedbackImages/correct.png").toExternalForm()));
-                score++;
-            } else {
-                feedbackView.setImage(new Image(getClass().getResource("/feedbackImages/incorrect.png").toExternalForm()));
-            }
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.play();
-            feedbackView.setImage(null);
-            newMeasure();
-        }
-    }
     private void setupMidi(){
         MidiDevice.Info[] deviceInfo = MidiSystem.getMidiDeviceInfo();
         for(int i=0; i< deviceInfo.length;i++){
@@ -312,13 +266,25 @@ private  class MidiInputReceiver implements Receiver {
                 System.out.println("Note ON: " + key + " | Velocity: " + velocity);
                 currentNotes.add(key);
                 if (currentNotes.equals(currentMeasure.get(0).getNotes())){
+                    Image image = new Image(getClass().getResource("/feedbackImages/correct.png").toExternalForm());
+                    feedbackView.setImage(image);
                     incrementScore();
-                    newMeasure();
                 } else {
-                    newMeasure();
+                    Image image = new Image(getClass().getResource("/feedbackImages/incorrect.jpg").toExternalForm());
+                    feedbackView.setImage(image);
                 }
-  
 
+                PauseTransition pause = new PauseTransition(Duration.millis(500));
+
+                // After the pause, clear the feedback image
+                pause.setOnFinished(event -> {
+                    Platform.runLater(() -> {
+                        feedbackView.setImage(null);
+                    });
+                });
+
+                newMeasure();
+                pause.play();
                
                 try {
                     channel.noteOn(key, velocity);
