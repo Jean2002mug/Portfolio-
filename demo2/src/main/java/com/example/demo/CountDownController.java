@@ -61,8 +61,7 @@ public class CountDownController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("game-core-view.fxml"));
             Parent root = loader.load();
             GameController controller = loader.getController();
-            controller.setStage(stage);
-        
+            controller.setStage(stage, this.minComplexity, this.maxComplexity);
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

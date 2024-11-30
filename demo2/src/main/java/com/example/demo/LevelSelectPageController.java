@@ -21,7 +21,7 @@ public class LevelSelectPageController {
     }
 
     public void levelTwo(){
-        moveToNextPage(0,1,new MeasureGenerator(1, 11, 1,4));
+        moveToNextPage(1,1,new MeasureGenerator(1, 11, 1,4));
     }
 
 
@@ -31,8 +31,8 @@ public class LevelSelectPageController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("clock.fxml"));
             Parent root = loader.load();
             CountDownController controller = loader.getController();
-            controller.setStage(stage);
             controller.setState(minComplexity, maxComplexity, generator);
+            controller.setStage(stage);
             Scene scene = new Scene(root);
             controller.startCountdown();
             stage.setScene(scene);
