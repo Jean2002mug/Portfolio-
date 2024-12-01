@@ -40,6 +40,8 @@ public class Chord {
     private Random random;
     private String noteName;
 
+    private String chordType;
+
 
     public Chord(int rootNote, int duration, int minComplexity, int maxComplexity) {
 
@@ -66,6 +68,7 @@ public class Chord {
             throw new IllegalArgumentException("minComplexity must be greater than maxComplexity");
         }
 
+
         List<String> possibleChords = CHORD_COMPLEXITY.entrySet()
                 .stream()
                 .filter(entry -> entry.getValue() <= maxComplexity && entry.getValue() >= minComplexity)
@@ -74,6 +77,7 @@ public class Chord {
         this.random = new Random();
 
         String chord = possibleChords.get(random.nextInt(possibleChords.size()));
+        this.chordType = chord;
 
         this.notes = new HashSet<>();
 
@@ -83,7 +87,7 @@ public class Chord {
             if(newNote <= MAX_NOTE_VALUE  && newNote >= MIN_NOTE_VALUE) notes.add(rootNote + interval);
         }
 
-        this.noteName = numToLetterSharps[rootNote % 12] + " " + chord;
+        this.noteName = numToLetterSharps[rootNote % 12] + chord;
 
     }
 
@@ -106,6 +110,7 @@ public class Chord {
     public String noteName() {
         return this.noteName;
     }
+
 
     public String getRootNoteName(){
         return numToLetterSharps[rootNote % 12];

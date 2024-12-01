@@ -46,7 +46,7 @@ public class GameController {
     private int minComplexity;
     private int maxComplexity;
     private Set<Integer> currentNotes = new HashSet<>();
-    public List<Chord> currentMeasure =new ArrayList<>();
+    public List<Chord> currentMeasure = new ArrayList<>();
     private int currentBeat;
 
     public int timeRemaining;
@@ -64,8 +64,12 @@ public class GameController {
     private Label scoreLabel;
 
     @FXML
-    public void setStage(Stage stage){
+    public void setStage(Stage stage, int minComplexity, int maxComplexity){
         this.stage = stage;
+        this.minComplexity = minComplexity;
+        this.maxComplexity = maxComplexity;
+        this.measureGenerator =  new MeasureGenerator(1, 11, 1,4);
+        newMeasure();
     }
 
     @FXML
@@ -99,9 +103,11 @@ public class GameController {
 
     private void newMeasure(){
         this.currentMeasure = this.measureGenerator.nextMeasure(minComplexity, maxComplexity);
+
         Platform.runLater(()->{
-            String note = currentMeasure.get(0).getRootNoteName();
-            Image image = new Image(getClass().getResource("/noteImages/" + note + ".png").toExternalForm());
+           Chord chord = currentMeasure.get(0);
+            System.out.println(chord.noteName());
+            Image image = new Image(getClass().getResource("/noteImages/" + chord.noteName() + ".png").toExternalForm());
             noteView.setImage(image);
         });
     }
@@ -124,15 +130,16 @@ public class GameController {
         }
         return false;
     }
+
+    public void setComplexity(int minComplexity, int maxComplexity){
+        this.minComplexity = minComplexity;
+        this.maxComplexity = maxComplexity;
+    }
    @FXML
    public void initialize(){
-        this.minComplexity = 0;
-        this.maxComplexity = 0;
         this.timeRemaining = 60;
         currentBeat = 0;
-        this.measureGenerator =  new MeasureGenerator(1, 11, 1,4);
         this.score = 0;
-        newMeasure();
         setupMidi();
         startCountDown();
     }
