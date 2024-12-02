@@ -4,43 +4,38 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.MeasureGenerator;
 
 import java.io.IOException;
 
 public class LevelSelectPageController {
-    Stage stage;
+    private Stage stage;
 
-    public void setStage(Stage stage){
+    public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-
-    public void levelOne(){
-        moveToNextPage(0, 0, new MeasureGenerator(1, 11, 1,4));
+    public void levelOne() {
+        moveToDescriptionPage(0, 0, "Level One: Single notes, Timeframe: 1 minute, Good luck!");
     }
 
-    public void levelTwo(){
-        moveToNextPage(1,1,new MeasureGenerator(1, 11, 1,4));
+    public void levelTwo() {
+        moveToDescriptionPage(1, 1, "Level Two: Chords with multiple notes, Timeframe: 1 minute, Good luck!");
     }
 
-
-
-    private void moveToNextPage(int minComplexity, int maxComplexity, MeasureGenerator generator){
+    private void moveToDescriptionPage(int minComplexity, int maxComplexity, String description) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("clock.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LevelDescription.fxml"));
             Parent root = loader.load();
-            CountDownController controller = loader.getController();
-            controller.setState(minComplexity, maxComplexity, generator);
+
+            LevelDescriptionController controller = loader.getController();
             controller.setStage(stage);
+            controller.setLevelDetails(minComplexity, maxComplexity, description);
+
             Scene scene = new Scene(root);
-            controller.startCountdown();
             stage.setScene(scene);
             stage.show();
-        } catch (IOException e){
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
-
 }
