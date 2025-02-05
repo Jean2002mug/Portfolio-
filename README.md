@@ -1,1 +1,1 @@
-# Team-2
+Sight Reading : COMP 4721 group project 
